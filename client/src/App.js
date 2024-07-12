@@ -1,15 +1,33 @@
-// src/App.js
-import React from 'react';
-import './App.css';
-import ConnectWallet from './ConnectWallet'; // Import the ConnectWallet component
+// App.js
+// This file sets up the Web3 connection and renders the UploadForm component.
+
+import React, { useState, useEffect } from 'react';
+import Web3 from 'web3';
+import UploadForm from './components/UploadForm';
 
 function App() {
+  const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(null);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      const web3Instance = new Web3(window.ethereum);
+      setWeb3(web3Instance);
+      window.ethereum.request({ method: 'eth_requestAccounts' })
+        .then(accounts => setAccount(accounts[0]));
+    } else {
+      console.error('Please install MetaMask!');
+    }
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Fractls DApp</h1>
-        <ConnectWallet /> {/* Include the ConnectWallet component */}
-      </header>
+      <h1>Fractional NFT DApp</h1>
+      {account ? (
+        <UploadForm web3={web3} account={account} />
+      ) : (
+        <p>Please connect your wallet.</p>
+      )}
     </div>
   );
 }
