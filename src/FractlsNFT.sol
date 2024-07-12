@@ -10,19 +10,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  */
 contract FractlsNFT is ERC721URIStorage, Ownable {
     uint256 public tokenCounter;
-    uint256 public constant TOTAL_FRACTIONS = 9;
-    address public intermediaryWallet;
     mapping(uint256 => uint256) public originalToFractions;
     mapping(uint256 => bool) public fractionsMinted;
+    uint256 public constant TOTAL_FRACTIONS = 9;
+    address public intermediaryWallet;
 
     /**
      * @dev Constructor to set the intermediary wallet and initialize the contract
      * @param _intermediaryWallet Address of the wallet that will hold the NFTs initially
+     * @param initialOwner Address of the initial owner of the contract
      */
-    constructor(address _intermediaryWallet) ERC721("FractlsNFT", "FRACT") {
+    constructor(address _intermediaryWallet, address initialOwner) ERC721("FractlsNFT", "FRACT") Ownable(initialOwner) {
         tokenCounter = 0;
         intermediaryWallet = _intermediaryWallet;
-        // Ownable constructor is implicitly called, setting the deployer as the owner
     }
 
     /**
@@ -79,41 +79,5 @@ contract FractlsNFT is ERC721URIStorage, Ownable {
         }
 
         fractionsMinted[originalId] = false;
-    }
-
-    /**
-     * @dev Override _burn function from ERC721URIStorage to clear metadata
-     * @param tokenId The ID of the token to burn
-     */
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
-    /**
-     * @dev Override tokenURI function from ERC721URIStorage to return token URI
-     * @param tokenId The ID of the token
-     * @return The URI of the token
-     */
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
-    }
-
-    /**
-     * @dev Override supportsInterface function to support multiple interfaces
-     * @param interfaceId The ID of the interface
-     * @return Boolean indicating if the interface is supported
-     */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC721)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
     }
 }
