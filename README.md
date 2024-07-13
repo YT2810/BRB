@@ -1,4 +1,3 @@
-
 # Fractls-DApp
 
 Fractls is a decentralized application (DApp) designed to create and manage fractionalized NFTs (Non-Fungible Tokens). The platform allows artists to upload images, set prices, and mint an original NFT along with 9 fractionalized NFTs. Users can buy, trade, and assemble these fractional NFTs. The owner of all 9 fractions can claim the original NFT, adding a unique puzzle-like gaming interface to the NFT experience.
@@ -20,27 +19,31 @@ Fractls aims to bridge the gap between beginner artists and the current NFT spac
 
 ## Project Structure
 
-```
 Fractls-DApp/
-├── client/                      # React frontend application
-│   ├── public/
-│   ├── src/
-│   │   ├── App.js               # Main React component
-│   │   ├── FractlsNFT.json      # ABI of the deployed contract
-│   │   ├── components/          # React components
-│   │   └── ...
-│   ├── .env                     # Environment variables for frontend
-│   └── package.json             # Frontend dependencies
-├── contracts/                   # Solidity smart contracts
-│   └── FractlsNFT.sol           # Main NFT contract
-├── script/                      # Deployment scripts
-│   └── DeployFractls.s.sol      # Script to deploy FractlsNFT contract
-├── lib/                         # Libraries
-│   └── openzeppelin-contracts/  # OpenZeppelin contracts
-├── .env                         # Environment variables for backend
-├── foundry.toml                 # Foundry configuration file
-└── README.md                    # Project documentation
-```
+├── client/ # React frontend application
+│ ├── public/
+│ ├── src/
+│ │ ├── App.js # Main React component
+│ │ ├── FractlsNFT.json # ABI of the deployed contract
+│ │ ├── components/ # React components
+│ │ └── ...
+│ ├── .env # Environment variables for frontend
+│ └── package.json # Frontend dependencies
+├── contracts/ # Solidity smart contracts
+│ └── FractlsNFT.sol # Main NFT contract
+├── script/ # Deployment scripts
+│ └── DeployFractls.s.sol # Script to deploy FractlsNFT contract
+├── lib/ # Libraries
+│ └── openzeppelin-contracts/ # OpenZeppelin contracts
+├── server/ # Backend server
+│ ├── routes/ # Express routes
+│ ├── services/ # Service layer for business logic
+│ ├── models/ # Mongoose models
+│ └── index.js # Main server file
+├── .env # Environment variables for backend
+├── foundry.toml # Foundry configuration file
+└── README.md # Project documentation
+
 
 ## Setting Up the Development Environment
 
@@ -77,6 +80,8 @@ Fractls-DApp/
     INFURA_PROJECT_ID=your_infura_project_id
     INTERMEDIARY_WALLET=your_intermediary_wallet_address
     INITIAL_OWNER=your_initial_owner_address
+    PINATA_JWT=your_pinata_jwt
+    MONGODB_URI=your_mongodb_uri
     ```
 
     Create a `.env` file in the `client` directory and add the following:
@@ -96,10 +101,17 @@ Fractls-DApp/
 5. **Deploy the smart contract:**
 
     ```sh
-    source .env && forge script script/DeployFractls.s.sol --rpc-url https://sepolia.infura.io/v3/$INFURA_PROJECT_ID --broadcast
+    source .env && forge script script/DeployFractls.s.sol --rpc-url https://sepolia.infura.io/v3/$INFURA_PROJECT_ID --private-key $YOUR_PRIVATE_KEY --broadcast
     ```
 
-6. **Start the frontend:**
+6. **Start the backend server:**
+
+    ```sh
+    cd server
+    node index.js
+    ```
+
+7. **Start the frontend:**
 
     ```sh
     cd client
@@ -109,10 +121,10 @@ Fractls-DApp/
 ## Usage
 
 1. **Connect MetaMask to the Sepolia network.**
-2. **Upload images and set prices for creating NFTs.**
-3. **Mint the original NFT and its 9 fractional NFTs.**
-4. **Buy, trade, and assemble fractional NFTs.**
-5. **Claim the original NFT by owning all 9 fractional NFTs.**
+2. **Navigate to the "Mint" page.**
+3. **Upload an image and set the desired price.**
+4. **Confirm the transaction in MetaMask.**
+5. **Monitor the transaction on Etherscan.**
 
 ## Smart Contract
 
