@@ -1,24 +1,16 @@
 // server/services/uploadService.js
-// This service handles image fractionation and uploads to IPFS using Pinata.
-
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
 const Jimp = require('jimp');
 const path = require('path');
-const webp = require('webp-converter');  // Import the webp-converter for handling webp images
-const Image = require('../models/ImageModel'); // Import the Image model
-const Batch = require('../models/BatchModel'); // Import the Batch model
-require('dotenv').config(); // Ensure dotenv is configured
+const webp = require('webp-converter');
+const Image = require('../models/ImageModel');
+require('dotenv').config();
 
-// Retrieve Pinata JWT from environment variables
 const PINATA_JWT = process.env.PINATA_JWT;
 
-/**
- * Uploads a file to Pinata using JWT for authentication
- * @param {string} filePath - Path to the file to be uploaded
- * @returns {Promise<Object>} - Response data from Pinata
- */
+// Function to upload a file to Pinata using JWT for authentication
 async function uploadToPinata(filePath) {
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
   let data = new FormData();
@@ -32,6 +24,7 @@ async function uploadToPinata(filePath) {
         'Authorization': `Bearer ${PINATA_JWT}`,
       },
     });
+    console.log('Pinata response:', res.data);
     return res.data;
   } catch (error) {
     console.error('Error uploading to Pinata:', error.response ? error.response.data : error.message);
@@ -39,12 +32,7 @@ async function uploadToPinata(filePath) {
   }
 }
 
-/**
- * Writes a Jimp image to disk and ensures it is completed before resolving the promise
- * @param {Jimp} image - The Jimp image object
- * @param {string} filePath - Path to write the image
- * @returns {Promise<void>}
- */
+// Function to write a Jimp image to disk
 function writeImage(image, filePath) {
   return new Promise((resolve, reject) => {
     image.write(filePath, (err) => {
@@ -54,23 +42,14 @@ function writeImage(image, filePath) {
   });
 }
 
-/**
- * Converts a webp image to jpeg using webp-converter
- * @param {string} filePath - Path to the webp image
- * @returns {Promise<string>} - Path to the converted jpeg image
- */
+// Function to convert a WebP image to JPEG
 async function convertWebpToJpeg(filePath) {
   const outputFilePath = filePath.replace('.webp', '.jpeg');
   await webp.dwebp(filePath, outputFilePath, '-o');
   return outputFilePath;
 }
 
-/**
- * Generates random prices for fractions ensuring their sum equals the total price
- * @param {number} totalPrice - Total price of the NFT
- * @param {number} numFractions - Number of fractions
- * @returns {Array<number>} - Array of random prices for each fraction
- */
+// Function to generate random prices for fractions
 function generateRandomPrices(totalPrice, numFractions) {
   let prices = [];
   let remainingPrice = totalPrice;
@@ -81,21 +60,15 @@ function generateRandomPrices(totalPrice, numFractions) {
     remainingPrice -= price;
   }
 
-  prices.push(remainingPrice); // Add remaining price as the last fraction's price
+  prices.push(remainingPrice);
   return prices;
 }
 
-/**
- * Fractionates an image into 9 parts and uploads them to Pinata
- * @param {string} imagePath - Path to the image to be fractionated
- * @param {string} owner - Wallet address of the owner
- * @param {number} totalPrice - Total price of the NFT
- * @returns {Promise<Object>} - Object containing the original image and fractions data
- */
+// Function to fractionate an image into 9 parts and upload to Pinata
 async function fractionateImage(imagePath, owner, totalPrice) {
   let image = await Jimp.read(imagePath);
 
-  // If the image is in webp format, convert it to jpeg first
+  // Convert WebP image to JPEG if necessary
   if (imagePath.endsWith('.webp')) {
     const convertedImagePath = await convertWebpToJpeg(imagePath);
     image = await Jimp.read(convertedImagePath);
@@ -104,10 +77,11 @@ async function fractionateImage(imagePath, owner, totalPrice) {
   const width = image.bitmap.width / 3;
   const height = image.bitmap.height / 3;
 
-  const prices = generateRandomPrices(totalPrice, 9); // Generate random prices
+  const prices = generateRandomPrices(totalPrice, 9);
   const promises = [];
   const fractionedImages = [];
 
+  // Fractionate the image into 9 parts and upload each to Pinata
   for (let y = 0; y < 3; y++) {
     for (let x = 0; x < 3; x++) {
       const clone = image.clone();
@@ -124,7 +98,7 @@ async function fractionateImage(imagePath, owner, totalPrice) {
   // Save the image and its fractions to the database
   const newImage = new Image({
     originalImage: imagePath,
-    fractionedImages: fractionedImages,
+    fractionedImages: fractionedImages, // Ensure only URIs are saved
     owner: owner,
     price: totalPrice
   });

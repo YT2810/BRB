@@ -1,8 +1,7 @@
 // client/src/components/UploadForm.js
 import React, { useState } from 'react';
-import axios from 'axios';
 
-const UploadForm = ({ web3, account }) => {
+const UploadForm = ({ account, handleUpload }) => {
   const [image, setImage] = useState(null);
   const [totalPrice, setTotalPrice] = useState('');
   const [fractions, setFractions] = useState(null);
@@ -13,19 +12,7 @@ const UploadForm = ({ web3, account }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append('image', image);
-    formData.append('totalPrice', totalPrice);
-    formData.append('owner', account);
-
-    try {
-      const response = await axios.post('http://localhost:3001/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
-      setFractions(response.data.fractions);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
+    await handleUpload(image, totalPrice);
   };
 
   return (
