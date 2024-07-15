@@ -19,6 +19,7 @@ Fractls aims to bridge the gap between beginner artists and the current NFT spac
 
 ## Project Structure
 
+```plaintext
 Fractls-DApp/
 ├── client/ # React frontend application
 │ ├── public/
@@ -44,104 +45,79 @@ Fractls-DApp/
 ├── foundry.toml # Foundry configuration file
 └── README.md # Project documentation
 
+Setting Up the Development Environment
 
-## Setting Up the Development Environment
+Prerequisites
+Node.js and npm
+Foundry
+MetaMask browser extension
+Infura account
+Pinata account
+MongoDB Atlas account
 
-### Prerequisites
+Installation Steps
 
-- Node.js and npm
-- Foundry
-- MetaMask browser extension
-- Infura account
-- Pinata account
-- MongoDB Atlas account
+Clone the repository:
+git clone https://github.com/your-username/Fractls-DApp.git
+cd Fractls-DApp
 
-### Installation Steps
+Install frontend dependencies:
 
-1. **Clone the repository:**
+cd client
+npm install
 
-    ```sh
-    git clone https://github.com/your-username/Fractls-DApp.git
-    cd Fractls-DApp
-    ```
+Configure environment variables:
 
-2. **Install frontend dependencies:**
+Create a .env file in the root directory and add the following:
 
-    ```sh
-    cd client
-    npm install
-    ```
+INFURA_PROJECT_ID=your_infura_project_id
+INTERMEDIARY_WALLET=your_intermediary_wallet_address
+INITIAL_OWNER=your_initial_owner_address
+PINATA_JWT=your_pinata_jwt
+MONGODB_URI=your_mongodb_uri
 
-3. **Configure environment variables:**
+Create a .env file in the client directory and add the following:
 
-    Create a `.env` file in the root directory and add the following:
+REACT_APP_INFURA_PROJECT_ID=your_infura_project_id
+REACT_APP_CONTRACT_ADDRESS=your_contract_address
 
-    ```sh
-    INFURA_PROJECT_ID=your_infura_project_id
-    INTERMEDIARY_WALLET=your_intermediary_wallet_address
-    INITIAL_OWNER=your_initial_owner_address
-    PINATA_JWT=your_pinata_jwt
-    MONGODB_URI=your_mongodb_uri
-    ```
+Install Foundry dependencies:
 
-    Create a `.env` file in the `client` directory and add the following:
+forge install OpenZeppelin/openzeppelin-contracts
+forge install foundry-rs/forge-std --no-commit
 
-    ```sh
-    REACT_APP_INFURA_PROJECT_ID=your_infura_project_id
-    REACT_APP_CONTRACT_ADDRESS=your_contract_address
-    ```
+Deploy the smart contract:
 
-4. **Install Foundry dependencies:**
+source .env && forge script script/DeployFractls.s.sol --rpc-url https://sepolia.infura.io/v3/$INFURA_PROJECT_ID --private-key $YOUR_PRIVATE_KEY --broadcast
 
-    ```sh
-    forge install OpenZeppelin/openzeppelin-contracts
-    forge install foundry-rs/forge-std --no-commit
-    ```
 
-5. **Deploy the smart contract:**
+Start the backend server:
 
-    ```sh
-    source .env && forge script script/DeployFractls.s.sol --rpc-url https://sepolia.infura.io/v3/$INFURA_PROJECT_ID --private-key $YOUR_PRIVATE_KEY --broadcast
-    ```
+cd server
+node index.js
 
-6. **Start the backend server:**
+Start the frontend:
 
-    ```sh
-    cd server
-    node index.js
-    ```
+cd client
+npm start
 
-7. **Start the frontend:**
+Usage
+Connect MetaMask to the Sepolia network.
+Navigate to the "Mint" page.
+Upload an image and set the desired price.
+Confirm the transaction in MetaMask.
+Monitor the transaction on Etherscan.
+Smart Contract
+FractlsNFT.sol
+The FractlsNFT contract is used to manage the minting and ownership of fractionalized NFTs. The contract allows for the creation of an original NFT and its fractional NFTs. Users can claim the original NFT if they own all the fractional NFTs.
 
-    ```sh
-    cd client
-    npm start
-    ```
-
-## Usage
-
-1. **Connect MetaMask to the Sepolia network.**
-2. **Navigate to the "Mint" page.**
-3. **Upload an image and set the desired price.**
-4. **Confirm the transaction in MetaMask.**
-5. **Monitor the transaction on Etherscan.**
-
-## Smart Contract
-
-### `FractlsNFT.sol`
-
-The `FractlsNFT` contract is used to manage the minting and ownership of fractionalized NFTs. The contract allows for the creation of an original NFT and its fractional NFTs. Users can claim the original NFT if they own all the fractional NFTs.
-
-#### Functions
-
-- `constructor(address _intermediaryWallet, address initialOwner)`: Initializes the contract with the intermediary wallet and the initial owner.
-- `createCollectible(string memory originalTokenURI, string[] memory fractionTokenURIs)`: Creates the original NFT and its fractions.
-- `claimOriginal(uint256[] memory fractionIds)`: Claims the original NFT if all fractions are owned by the caller.
-
-## Contributing
-
+Functions
+constructor(address _intermediaryWallet, address initialOwner): Initializes the contract with the intermediary wallet and the initial owner.
+createCollectible(string memory originalTokenURI, string[] memory fractionTokenURIs): Creates the original NFT and its fractions.
+claimOriginal(uint256[] memory fractionIds): Claims the original NFT if all fractions are owned by the caller.
+Contributing
 Contributions are welcome! Please create a pull request with your changes.
 
-## License
-
+License
 This project is licensed under the MIT License.
+

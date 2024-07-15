@@ -8,7 +8,6 @@ require('dotenv').config();
 
 const router = express.Router();
 
-// Set up multer for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, '../uploads');
@@ -25,7 +24,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// POST /upload
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     const file = req.file;
@@ -39,12 +37,13 @@ router.post('/', upload.single('image'), async (req, res) => {
       return res.status(400).send('No file uploaded.');
     }
 
-    // Process the image to create fractions
     console.log('Processing image to create fractions...');
     const { originalImage, fractionedImages } = await fractionateImage(file.path, owner, totalPrice);
 
-    const originalImageUri = 'ipfs://original_image_uri'; // Replace with actual IPFS URI
+    const originalImageUri = originalImage;
     console.log('Image processing complete. Sending response to client...');
+    console.log('Original Image URI:', originalImageUri);
+    console.log('Fractioned Images:', fractionedImages);
     res.json({ originalImageUri, fractionedImages });
 
   } catch (error) {
@@ -54,3 +53,4 @@ router.post('/', upload.single('image'), async (req, res) => {
 });
 
 module.exports = router;
+

@@ -1,6 +1,4 @@
 // server/index.js
-// This is the main server file which initializes the Express app and sets up routes.
-
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -73,6 +71,30 @@ app.post('/claim', (req, res) => {
     console.log(`Claim script output: ${stdout}`);
     res.send('Claim completed.');
   });
+});
+
+// Endpoint to list fractions for sale
+app.post('/listForSale', (req, res) => {
+  const { fractionId, price } = req.body;
+  // Implement the logic to list the fraction for sale
+  // This should include storing the sale info in the database
+  res.send(`Fraction ${fractionId} listed for sale at price ${price}`);
+});
+
+// Endpoint to buy fractions
+app.post('/buyFraction', (req, res) => {
+  const { fractionId, buyer } = req.body;
+  // Implement the logic to buy the fraction
+  // This should include updating ownership in the smart contract and database
+  res.send(`Fraction ${fractionId} bought by ${buyer}`);
+});
+
+// Endpoint to trade fractions
+app.post('/tradeFraction', (req, res) => {
+  const { fractionId, seller, buyer, price } = req.body;
+  // Implement the logic to trade the fraction between users
+  // This should include transferring the fraction and handling payments
+  res.send(`Fraction ${fractionId} traded from ${seller} to ${buyer} for price ${price}`);
 });
 
 app.listen(PORT, () => {

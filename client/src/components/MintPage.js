@@ -41,7 +41,8 @@ const MintPage = ({ web3, account }) => {
       const contract = new web3.eth.Contract(FractlsNFT.abi, contractAddress);
       console.log('Contract instance created:', contract);
 
-      await contract.methods.createCollectible(originalImageUri, fractionedImages).send({ from: account });
+      // Mint the original NFT and fractional NFTs
+      await contract.methods.mintOriginalAndFractions(originalImageUri, fractionedImages, account, 10, totalPrice).send({ from: account });
 
       setStatus('Minting completed!');
       console.log('Minting completed!');

@@ -9,11 +9,15 @@ contract DeployFractls is Script {
         // Load environment variables
         address intermediaryWallet = vm.envAddress("INTERMEDIARY_WALLET");
         address initialOwner = vm.envAddress("INITIAL_OWNER");
+        uint256 commissionPercentage = vm.envUint("COMMISSION_PERCENTAGE");
 
         vm.startBroadcast();
         
-        new FractlsNFT(intermediaryWallet, initialOwner);
+        FractlsNFT fractlsNFT = new FractlsNFT(intermediaryWallet, initialOwner, commissionPercentage);
         
         vm.stopBroadcast();
+
+        // Print the contract address to the console
+        console.log("FractlsNFT deployed to:", address(fractlsNFT));
     }
 }
