@@ -1,40 +1,131 @@
-.App {
-  text-align: center;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
+header {
   background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.App-link {
-  color: #61dafb;
+.header-logo {
+  font-size: 1.5rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.header-nav a,
+.header-nav button {
+  color: white;
+  background: none;
+  border: none;
+  margin: 0 10px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.header-nav button:hover,
+.header-nav a:hover {
+  text-decoration: underline;
+}
+
+main {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.section1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px;
+}
+
+.left-column,
+.right-column {
+  flex: 1;
+  margin: 10px;
+}
+
+.left-column h1 {
+  font-size: 5rem; /* Increase title size */
+}
+
+.left-column p {
+  font-size: 1.5rem; /* Increase description size */
+  line-height: 1.6;
+}
+
+.left-column button {
+  font-size: 1.5rem; /* Increase button size */
+  padding: 15px 30px; /* Increase button padding */
+}
+
+.right-column img {
+  width: 90%; /* Increase image size */
+  max-width: 500px;
+}
+
+button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+.section2 {
+  background-color: #f8f9fa;
+  padding: 20px;
+  font-size: 2rem; /* Increase font size */
+  color: #0066cc; /* Contrast color */
+}
+
+.section3 {
+  padding: 20px;
+}
+
+.nft-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.nft-grid img {
+  width: 25%; /* Reduce NFT images width */
+  height: auto;
+  margin: 10px;
+}
+
+footer {
+  background-color: #282c34;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.social-icons {
+  margin-top: 10px;
+}
+
+.social-icons img {
+  width: 30px;
+  height: 30px;
+  margin: 0 10px;
 }
 
 .popup {
@@ -59,17 +150,140 @@
 
 .close-popup {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -20px; /* Move close button higher */
+  right: -20px; /* Move close button to the right */
   background: red;
-  color: black;
+  color: white;
   border: none;
-  border-radius: 3px;
-  padding: 5px 10px;
+  border-radius: 50%;
+  padding: 10px;
   font-size: 16px;
   cursor: pointer;
 }
 
 .close-popup:hover {
   background: darkred;
+}
+
+@media (max-width: 768px) {
+  .section1 {
+    flex-direction: column;
+  }
+
+  .right-column img {
+    width: 100%;
+  }
+
+  .nft-grid img {
+    width: 80%;
+  }
+}
+
+/* MintPage and UploadForm styles */
+.mint-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.mint-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.status {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.upload-form {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1000px; /* Slightly reduce the max width */
+  margin: 0 auto; /* Center the form on the page */
+}
+
+.form-container {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  max-width: 500px; /* Adjust the width of the form */
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: auto; /* Adjust input width */
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.input-price {
+  width: 50%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f1f1f1; /* Lighter background for visibility */
+  color: #333;
+}
+
+.custom-file-upload:hover {
+  background-color: #ddd; /* Darker background on hover */
+}
+
+.form-container button {
+  width: 100%;
+  padding: 15px;
+  font-size: 1.2rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #218838;
+}
+
+.image-preview {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #ccc;
+  width: 500px; /* Match the width of the form */
+  height: 370px; /* Match the height of the form */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.placeholder {
+  color: #ccc;
+  font-size: 1.5rem;
+  text-align: center;
 }

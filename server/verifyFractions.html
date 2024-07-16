@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Fractions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .fraction {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fractions Verification</h1>
+  <div id="fractions-container">
+    Loading fractions...
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch("http://localhost:3001/fractions")
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('fractions-container');
+          container.innerHTML = ''; // Clear loading message
+          data.forEach(fraction => {
+            const fractionDiv = document.createElement('div');
+            fractionDiv.className = 'fraction';
+            fractionDiv.innerHTML = `
+              <p><strong>Fraction ID:</strong> ${fraction.fractionId}</p>
+              <p><strong>Original ID:</strong> ${fraction.originalId}</p>
+              <p><strong>Token URI:</strong> <a href="${fraction.tokenURI}" target="_blank">${fraction.tokenURI}</a></p>
+              <p><strong>Price:</strong> ${fraction.price} wei</p>
+              <p><strong>Owner:</strong> ${fraction.owner}</p>
+            `;
+            container.appendChild(fractionDiv);
+          });
+        })
+        .catch(error => {
+          const container = document.getElementById('fractions-container');
+          container.innerHTML = 'Error loading fractions: ' + error.message;
+        });
+    });
+  </script>
+</body>
+</html>

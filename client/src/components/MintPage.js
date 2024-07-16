@@ -1,4 +1,3 @@
-// client/src/components/MintPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import UploadForm from './UploadForm';
@@ -53,10 +52,10 @@ const MintPage = ({ web3, account }) => {
   };
 
   return (
-    <div>
+    <div className="mint-container">
       <h2>Mint a new Fractional NFT</h2>
       <UploadForm account={account} handleUpload={handleUpload} />
-      <p>{status}</p>
+      <p className="status">{status}</p>
     </div>
   );
 };

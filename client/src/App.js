@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate } from 'react-router-dom';
 import MintPage from './components/MintPage';
+import LandingPage from './components/LandingPage';
 import './App.css';
 
 function App() {
   const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [showMarketplacePopup, setShowMarketplacePopup] = useState(false);
 
+  // Function to connect wallet
   const connectWallet = async () => {
     if (window.ethereum) {
       const web3Instance = new Web3(window.ethereum);
@@ -26,11 +29,13 @@ function App() {
     }
   };
 
+  // Function to disconnect wallet
   const disconnectWallet = () => {
     setAccount(null);
     setWeb3(null);
   };
 
+  // Effect to handle account changes
   useEffect(() => {
     if (window.ethereum) {
       window.ethereum.on('accountsChanged', (accounts) => {
@@ -43,6 +48,7 @@ function App() {
     }
   }, []);
 
+  // Protected route to check if wallet is connected
   const ProtectedRoute = ({ element }) => {
     if (!account) {
       setShowPopup(true); // Show popup if not connected
@@ -54,39 +60,41 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <header>
-          {account ? (
-            <button onClick={disconnectWallet} style={{ float: 'right' }}>
-              Disconnect ({account.slice(0, 6)}...{account.slice(-4)})
-            </button>
-          ) : (
-            <button onClick={connectWallet} style={{ float: 'right' }}>
-              Connect Wallet
-            </button>
-          )}
+        <header className="App-header">
+          <div className="header-logo">FRACTLS</div>
+          <nav className="header-nav">
+            <Link to="/">Home</Link>
+            <button onClick={() => setShowMarketplacePopup(true)}>Marketplace</button>
+            {account ? (
+              <button onClick={disconnectWallet}>
+                Disconnect ({account.slice(0, 6)}...{account.slice(-4)})
+              </button>
+            ) : (
+              <button onClick={connectWallet}>Connect Wallet</button>
+            )}
+          </nav>
         </header>
-        <h1 style={{ textAlign: 'center' }}>Fractional NFT DApp</h1>
-        <p style={{ textAlign: 'center' }}>Decentralized platform to mint and fractionate NFTs.</p>
-        <div style={{ textAlign: 'center', marginTop: '20px' }}>
-          <Link to="/mint">
-            <button style={{ marginRight: '10px' }}>MINT</button>
-          </Link>
-          <Link to="/marketplace">
-            <button>Marketplace</button>
-          </Link>
-        </div>
         {showPopup && (
           <div className="popup">
             <div className="popup-content">
+              <button onClick={() => setShowPopup(false)} className="close-popup">X</button>
               <p>Please connect your wallet to mint NFTs.</p>
               <button onClick={connectWallet}>Connect Wallet</button>
-              <button onClick={() => setShowPopup(false)} className="close-popup">Close</button>
+            </div>
+          </div>
+        )}
+        {showMarketplacePopup && (
+          <div className="popup">
+            <div className="popup-content">
+              <button onClick={() => setShowMarketplacePopup(false)} className="close-popup">X</button>
+              <p>UNDER CONSTRUCTION, COMING SOON</p>
             </div>
           </div>
         )}
         <Routes>
+          <Route path="/" element={<LandingPage account={account} setShowPopup={setShowPopup} />} />
           <Route path="/mint" element={<ProtectedRoute element={<MintPage web3={web3} account={account} />} />} />
-          <Route path="/marketplace" element={<div>Marketplace coming soon!</div>} />
+          <Route path="/marketplace" element={<div>Under Construction, coming soon</div>} />
         </Routes>
       </div>
     </Router>
